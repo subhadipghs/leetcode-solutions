@@ -1,3 +1,4 @@
+import typing_extensions
 import unittest
 
 
@@ -33,6 +34,26 @@ class List:
         self.count += 1
         return True
 
+    def remove_node(self, val: int) -> bool:
+        """
+            Remove node with provided value
+        """
+        r = self.head
+        parent_node = self.head
+        flag = False
+        while r.next != None:
+            if r.val == val:
+                flag = True
+                break
+            parent_node = r
+            r = r.next
+        # now we have the parent node
+        if flag:
+            parent_node.next = r.next
+            del r
+            self.count -= 1
+        return flag
+
     def append(self, val: int) -> bool:
         """
             Insert at the end of the list
@@ -58,6 +79,27 @@ class List:
     def size(self) -> int:
         return self.count
 
+    def make_list(self) -> list:
+        l = []
+        ref = self.head
+        while ref != None:
+            l.append(ref.val)
+            ref = ref.next
+        return l
+
+    def __eq__(self, __o: object) -> bool:
+        ref = self.head
+        other_ref = __o.head
+        print(__o.size())
+        if self.size() != __o.size():
+            return False
+        while ref != None and other_ref != None:
+            if ref.val != other_ref.val:
+                return False
+            ref = ref.next
+            other_ref = other_ref.next
+        return True
+
     def get_list(self):
         l = []
         ptr = self.head
@@ -69,7 +111,7 @@ class List:
     def print(self) -> None:
         ptr = self.head
         while ptr != None:
-            print(ptr.val)
+            print(ptr.val, end=" ")
             ptr = ptr.next
 
 
@@ -83,6 +125,39 @@ class TestsSum(unittest.TestCase):
     def test_size_zero(self):
         l = List()
         self.assertEqual(l.size(), 0)
+
+    def test_remove_node_from_middle(self):
+        l = List()
+        """
+            [1, 2, 3, 4, 5]
+        """
+        for i in [1, 2, 4, 5, 8]:
+            l.append(i)
+        self.assertEqual(l.size(), 5)
+        l.remove_node(4)
+        self.assertEqual(l.size(), 4)
+        self.assertEqual(l.make_list(), [1, 2, 5, 8])
+
+    def test_remove_node_from_head(self):
+        l = List()
+        """
+            [1, 2, 3, 4, 5]
+        """
+        for i in [1, 2, 4, 5, 8]:
+            l.append(i)
+        self.assertEqual(l.size(), 5)
+        l.remove_node(1)
+        self.assertEqual(l.size(), 4)
+        self.assertEqual(l.make_list(), [2, 4, 5, 8])
+
+    def test_equality(self):
+        l = [1, 2, 4, 5]
+        c1 = List()
+        c2 = List()
+        for i in l:
+            c1.append(i)
+            c2.append(i)
+        self.assertTrue(c1 == c2)
 
 
 if __name__ == "__main__":
