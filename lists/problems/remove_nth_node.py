@@ -1,6 +1,7 @@
 # https://leetcode.com/problems/remove-nth-node-from-end-of-list/
-from re import L
 from typing import Optional
+from unittest import TestCase
+import unittest
 
 # Definition for singly-linked list.
 
@@ -19,7 +20,6 @@ class Solution:
         while r != None:
             c += 1
             r = r.next
-        print(c)
         r = self.head
         parent_node = self.head
         current = 0
@@ -36,27 +36,19 @@ class Solution:
         return flag
 
 
-def test_remove_nth_node():
-
-    l = ListNode(1)
-
-    for v in [2, 3, 4]:
-        ref = l
-        while ref.next != None:
-            ref = ref.next
-        ref.next = ListNode(v)
-
-    result = Solution().removeNthFromEnd(l, 2)
-    out(result)
+class TestRemoveNthNode(TestCase):
+    def test_remove_nth_node(self):
+        l = make([1, 2, 3, 4])
 
 
 def make(l: list):
-
-    for v in l:
-        ref = l
+    fn = ListNode(l[0])
+    for v in range(1, len(l)):
+        ref = fn
         while ref.next != None:
             ref = ref.next
-        ref.next = ListNode(v)
+        ref.next = ListNode(l[v])
+    return fn
 
 
 def get_arr(l: ListNode):
@@ -76,4 +68,4 @@ def out(l):
 
 
 if __name__ == '__main__':
-    test_remove_nth_node()
+    unittest.main()
